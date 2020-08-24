@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazoneSQS.ClientWrapper", "AmazoneSQS.ClientWrapper\AmazoneSQS.ClientWrapper.csproj", "{2DDFA708-2AF9-4012-937A-B9ACA247C3EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DDFA708-2AF9-4012-937A-B9ACA247C3EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DDFA708-2AF9-4012-937A-B9ACA247C3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DDFA708-2AF9-4012-937A-B9ACA247C3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DDFA708-2AF9-4012-937A-B9ACA247C3EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
