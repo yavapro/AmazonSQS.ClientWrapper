@@ -64,33 +64,6 @@ namespace AmazoneSQS.ClientWrapper
             throw new GetResponseFailedException(lastException);
         }
 
-        private int SuspendTimeInMilliseconds(int failedAttemptCount)
-        {
-            const int MillisecondsInSecond = 1000;
-
-            if (failedAttemptCount < 2)
-            {
-                return 0;
-            }
-
-            if (failedAttemptCount < 4)
-            {
-                return MillisecondsInSecond;
-            }
-
-            if (failedAttemptCount < 6)
-            {
-                return 5 * MillisecondsInSecond;
-            }
-
-            if (failedAttemptCount < 8)
-            {
-                return 10 * MillisecondsInSecond;
-            }
-
-            return 30 * MillisecondsInSecond;
-        }
-
         public async Task<DeleteMessageResponse> DeleteMessageWithDegradation(DeleteMessageRequest request, CancellationToken cancellationToken)
         {
             var failedAttemptCount = 0;
@@ -215,6 +188,33 @@ namespace AmazoneSQS.ClientWrapper
             }
 
             throw new GetResponseFailedException(lastException);
+        }
+
+        private int SuspendTimeInMilliseconds(int failedAttemptCount)
+        {
+            const int MillisecondsInSecond = 1000;
+
+            if (failedAttemptCount < 2)
+            {
+                return 0;
+            }
+
+            if (failedAttemptCount < 4)
+            {
+                return MillisecondsInSecond;
+            }
+
+            if (failedAttemptCount < 6)
+            {
+                return 5 * MillisecondsInSecond;
+            }
+
+            if (failedAttemptCount < 8)
+            {
+                return 10 * MillisecondsInSecond;
+            }
+
+            return 30 * MillisecondsInSecond;
         }
     }
 }
