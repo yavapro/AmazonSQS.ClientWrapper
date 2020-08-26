@@ -7,5 +7,11 @@ namespace AmazoneSQS.ClientWrapper
     public interface ISQSProvider
     {
         Task<ReceiveMessageResponse> ReceiveMessageWithDegradation(ReceiveMessageRequest request, CancellationToken cancellationToken);
+
+        Task<DeleteMessageResponse> DeleteMessageWithDegradation(DeleteMessageRequest request, CancellationToken cancellationToken);
+
+        Task<GetQueueUrlResponse> GetQueueUrlWithDegradation(GetQueueUrlRequest request, CancellationToken cancellationToken);
+
+        Task<GetQueueAttributesResponse> GetQueueAttributesWithDegradation(GetQueueAttributesRequest request, CancellationToken cancellationToken);
     }
 }

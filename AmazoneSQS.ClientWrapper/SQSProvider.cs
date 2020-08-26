@@ -21,14 +21,10 @@ namespace AmazoneSQS.ClientWrapper
         {
             var failedAttemptCount = 0;
             Exception lastException = null;
+            ReceiveMessageResponse response = null;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (failedAttemptCount < 10 && !cancellationToken.IsCancellationRequested)
             {
-                if (failedAttemptCount > 9)
-                {
-                    throw new ReceiveMessageFailedException(lastException);
-                }
-
                 var delayTime = SuspendTimeInMilliseconds(failedAttemptCount);
 
                 if (delayTime > 0)
@@ -36,11 +32,9 @@ namespace AmazoneSQS.ClientWrapper
                     await Task.Delay(delayTime, cancellationToken);
                 }
 
-                ReceiveMessageResponse response = null;
-
                 try
                 {
-                    response = await sqsClient.ReceiveMessageAsync(request);
+                    response = await sqsClient.ReceiveMessageAsync(request, cancellationToken);
 
                     if (response?.HttpStatusCode == HttpStatusCode.OK)
                     {
@@ -62,7 +56,12 @@ namespace AmazoneSQS.ClientWrapper
                 }
             }
 
-            return null;
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return null;
+            }
+
+            throw new GetResponseFailedException(lastException);
         }
 
         private int SuspendTimeInMilliseconds(int failedAttemptCount)
@@ -90,6 +89,132 @@ namespace AmazoneSQS.ClientWrapper
             }
 
             return 30 * MillisecondsInSecond;
+        }
+
+        public async Task<DeleteMessageResponse> DeleteMessageWithDegradation(DeleteMessageRequest request, CancellationToken cancellationToken)
+        {
+            var failedAttemptCount = 0;
+            Exception lastException = null;
+            DeleteMessageResponse response = null;
+
+            while (failedAttemptCount < 10 && !cancellationToken.IsCancellationRequested)
+            {
+                var delayTime = SuspendTimeInMilliseconds(failedAttemptCount);
+
+                if (delayTime > 0)
+                {
+                    await Task.Delay(delayTime, cancellationToken);
+                }
+
+                try
+                {
+                    response = await sqsClient.DeleteMessageAsync(request, cancellationToken);
+
+                    if (response?.HttpStatusCode == HttpStatusCode.OK)
+                    {
+                        return response;
+                    }
+
+                    lastException = new HttpRequestException($"Got HttpStatusCode {response?.HttpStatusCode} by request");
+                    failedAttemptCount++;
+                }
+                catch (AmazonSQSException ex)
+                {
+                    lastException = ex;
+                    failedAttemptCount++;
+                }
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return null;
+            }
+
+            throw new GetResponseFailedException(lastException);
+        }
+
+        public async Task<GetQueueUrlResponse> GetQueueUrlWithDegradation(GetQueueUrlRequest request, CancellationToken cancellationToken)
+        {
+            var failedAttemptCount = 0;
+            Exception lastException = null;
+            GetQueueUrlResponse response = null;
+
+            while (failedAttemptCount < 10 && !cancellationToken.IsCancellationRequested)
+            {
+                var delayTime = SuspendTimeInMilliseconds(failedAttemptCount);
+
+                if (delayTime > 0)
+                {
+                    await Task.Delay(delayTime, cancellationToken);
+                }
+
+                try
+                {
+                    response = await sqsClient.GetQueueUrlAsync(request, cancellationToken);
+
+                    if (response?.HttpStatusCode == HttpStatusCode.OK)
+                    {
+                        return response;
+                    }
+
+                    lastException = new HttpRequestException($"Got HttpStatusCode {response?.HttpStatusCode} by request");
+                    failedAttemptCount++;
+                }
+                catch (AmazonSQSException ex)
+                {
+                    lastException = ex;
+                    failedAttemptCount++;
+                }
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return null;
+            }
+
+            throw new GetResponseFailedException(lastException);
+        }
+
+        public async Task<GetQueueAttributesResponse> GetQueueAttributesWithDegradation(GetQueueAttributesRequest request, CancellationToken cancellationToken)
+        {
+            var failedAttemptCount = 0;
+            Exception lastException = null;
+            GetQueueAttributesResponse response = null;
+
+            while (failedAttemptCount < 10 && !cancellationToken.IsCancellationRequested)
+            {
+                var delayTime = SuspendTimeInMilliseconds(failedAttemptCount);
+
+                if (delayTime > 0)
+                {
+                    await Task.Delay(delayTime, cancellationToken);
+                }
+
+                try
+                {
+                    response = await sqsClient.GetQueueAttributesAsync(request, cancellationToken);
+
+                    if (response?.HttpStatusCode == HttpStatusCode.OK)
+                    {
+                        return response;
+                    }
+
+                    lastException = new HttpRequestException($"Got HttpStatusCode {response?.HttpStatusCode} by request");
+                    failedAttemptCount++;
+                }
+                catch (AmazonSQSException ex)
+                {
+                    lastException = ex;
+                    failedAttemptCount++;
+                }
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return null;
+            }
+
+            throw new GetResponseFailedException(lastException);
         }
     }
 }
